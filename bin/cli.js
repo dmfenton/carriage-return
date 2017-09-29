@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+const fs = require('fs')
+const path = require('path')
+
 const argv = require('yargs')
 .usage('Usage: $0 [options]')
 .example('$0 -l minor', 'bump your changelog to the next minor version')
@@ -20,4 +23,7 @@ const argv = require('yargs')
 .argv
 
 const carriageReturn = require('../')
-carriageReturn(argv)
+const file = argv.file || path.join(process.cwd(), 'CHANGELOG.md')
+const options = Object.assign(argv, {file})
+const changelog = carriageReturn(options)
+fs.writeFileSync(file, changelog)

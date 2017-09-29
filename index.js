@@ -1,18 +1,21 @@
 const fs = require('fs')
-const path = require('path')
 const semver = require('semver')
 const moment = require('moment')
 
 const unreleasedLink = new RegExp(/\[Unreleased\]: (https:\/\/.+)(?=\/compare)/)
 
-module.exports = function (options = {}) {
-  const file = options.file || path.join(process.cwd(), 'CHANGELOG.md')
-  const changelog = fs.readFileSync(file).toString()
+module.exports = function (options) {
+  let changelog = fs.readFileSync(options.file).toString()
   const oldVersion = parseOldVersion(changelog)
   const newVersion = options.newVersion || semver.inc(oldVersion, options.level)
 
   if (!newVersion) throw new Error('You must specify a new version or a semver change')
-  console.log(`Moving from ${oldVersion} to ${newVersion} in ${file}`)
+  console.log(`Moving from ${oldVersion} to ${newVersion} in ${options.file}`)
+
+  // remove empty sections from the changelog
+  changelog = changelog
+  .replace(/### (?:Added|Changed|Removed|Fixed)(?=\n###)/g, '\n')
+  .replace(/### (?:Added|Changed|Removed|Fixed)(?=\n\n##)/g, '')
 
   return changelog.split('\n').map(line => {
     if (line === '## [Unreleased]') {
@@ -27,6 +30,7 @@ module.exports = function (options = {}) {
   .reduce((lines, line) => {
     return [lines, line].join('\n')
   })
+  .replace(/\n{3,}/g, '\n\n')
 }
 
 function updateVersion (existing, newVersion) {
