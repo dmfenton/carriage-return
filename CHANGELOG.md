@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## [1.1.0] - 2017-09-29
+### Added
 * Automatically remove empty sections
 ### Fixed
 * CLI actually write the changes to disk :)
@@ -14,5 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 * Initial release
 
-[Unreleased]: https://github.com/dmfenton/carriage-return/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/dmfenton/carriage-return/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/dmfenton/carriage-return/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/dmfenton/carriage-return/releases/v1.0.0
