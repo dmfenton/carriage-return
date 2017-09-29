@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+const argv = require('yargs')
+.usage('Usage: $0 [options]')
+.example('$0 -l minor', 'bump your changelog to the next minor version')
+.example('$0 -nv 1.0.1', 'bump your changelog to version 1.0.1')
+.example('$0 -l major -f /users/foobar/changelogs/changelog.md', 'bump your changelog located at a specific filepath')
+.alias('f', 'file')
+.nargs('f', 1)
+.describe('f', 'Location of your changelog')
+.alias('l', 'level')
+.nargs('l', 1)
+.describe('l', 'Semantic version change e.g. major, minor, patch')
+.alias('nv', 'new-version')
+.describe('nv', 'The exact next version for yor changelog e.g. 2.3.1')
+.nargs('nv', 1)
+.help('h')
+.alias('h', 'help')
+.string(['f', 'l', 'nv'])
+.epilog('Made with ♥️  by Esri DC R&D')
+.argv
+
+const carriageReturn = require('../')
+carriageReturn(argv)

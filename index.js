@@ -1,16 +1,20 @@
 const fs = require('fs')
-const _ = require('lodash')
+const path = require('path')
 const semver = require('semver')
 const moment = require('moment')
 
 const unreleasedLink = new RegExp(/\[Unreleased\]: (https:\/\/.+)(?=\/compare)/)
 
-module.exports = function (file, level) {
+module.exports = function (options = {}) {
+  const file = options.file || path.join(process.cwd(), 'CHANGELOG.md')
   const changelog = fs.readFileSync(file).toString()
   const oldVersion = parseOldVersion(changelog)
-  const newVersion = semver.inc(oldVersion, level)
-  const lines = changelog.split('\n')
-  return lines.map(line => {
+  const newVersion = options.newVersion || semver.inc(oldVersion, options.level)
+
+  if (!newVersion) throw new Error('You must specify a new version or a semver change')
+  console.log(`Moving from ${oldVersion} to ${newVersion} in ${file}`)
+
+  return changelog.split('\n').map(line => {
     if (line === '## [Unreleased]') {
       return updateVersion(line, newVersion).join('\n')
     } else if (line.match(unreleasedLink)) {
@@ -25,7 +29,7 @@ module.exports = function (file, level) {
   })
 }
 
-function updateVersion(existing, newVersion) {
+function updateVersion (existing, newVersion) {
   const date = moment().format('YYYY-MM-DD')
   return [
     '## [Unreleased]',
@@ -46,7 +50,7 @@ function parseUrl (changelog) {
   return changelog.match(unreleasedLink)[1]
 }
 
-function updateLinks(existing, oldVersion, newVersion, url) {
+function updateLinks (existing, oldVersion, newVersion, url) {
   return [
     `[Unreleased]: ${url}/compare/v${newVersion}...HEAD`,
     `[${newVersion}]: ${url}/compare/v${oldVersion}...v${newVersion}`
