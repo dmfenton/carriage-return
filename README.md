@@ -1,6 +1,7 @@
-# Carriage Return
+# Carriage Return 📇
 
 Bumps the semantic version in your changelog
+
 
 ## CLI
 `npm i -g @dmfenton/carriage-return`
@@ -35,3 +36,7 @@ Made with ♥️ by Esri DC R&D
   }
 }
 ```
+
+## Why the name?
+
+When you get to the end of a line with a type writer, the carriage return allows you to start again at the next line
