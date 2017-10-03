@@ -14,23 +14,25 @@ module.exports = function (options) {
 
   // remove empty sections from the changelog
   changelog = changelog
-  .replace(/### (?:Added|Changed|Removed|Fixed)(?=\n###)/g, '\n')
-  .replace(/### (?:Added|Changed|Removed|Fixed)(?=\n\n##)/g, '')
+    .replace(/### (?:Added|Changed|Removed|Fixed|Breaking)(?=\n###)/g, '\n')
+    .replace(/### (?:Added|Changed|Removed|Fixed|Breaking)(?=\n\n##)/g, '')
 
-  return changelog.split('\n').map(line => {
-    if (line === '## [Unreleased]') {
-      return updateVersion(line, newVersion).join('\n')
-    } else if (line.match(unreleasedLink)) {
-      const url = parseUrl(changelog)
-      return updateLinks(line, oldVersion, newVersion, url).join('\n')
-    } else {
-      return line
-    }
-  })
-  .reduce((lines, line) => {
-    return [lines, line].join('\n')
-  })
-  .replace(/\n{3,}/g, '\n\n')
+  return changelog
+    .split('\n')
+    .map(line => {
+      if (line === '## [Unreleased]') {
+        return updateVersion(line, newVersion).join('\n')
+      } else if (line.match(unreleasedLink)) {
+        const url = parseUrl(changelog)
+        return updateLinks(line, oldVersion, newVersion, url).join('\n')
+      } else {
+        return line
+      }
+    })
+    .reduce((lines, line) => {
+      return [lines, line].join('\n')
+    })
+    .replace(/\n{3,}/g, '\n\n')
 }
 
 function updateVersion (existing, newVersion) {
@@ -41,6 +43,7 @@ function updateVersion (existing, newVersion) {
     '### Changed',
     '### Fixed',
     '### Removed',
+    '### Breaking',
     '',
     `## [${newVersion}] - ${date}`
   ]
