@@ -1,6 +1,6 @@
 {
   "name": "@dmfenton/carriage-return",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Automatically move a changelog to the next version",
   "main": "index.js",
   "bin": {
